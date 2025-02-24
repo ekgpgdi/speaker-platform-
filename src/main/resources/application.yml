@@ -8,6 +8,15 @@ spring:
     password: localpw
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        data-loader: 2
+
 # Swagger springdoc-ui Configuration
 springdoc:
   packages-to-scan: com.dahye.speakerplatform
@@ -24,3 +33,6 @@ springdoc:
     path: /api-swagger.html         # Swagger UI ?? ?? ?? =>
     tags-sorter: alpha          # alpha: ??? ? ?? ??, method: HTTP Method ? ??
     operations-sorter: alpha    # alpha: ??? ? ?? ??, method: HTTP Method ? ??
+
+app:
+  jwtSecret: OUQgqBBpggKnxB9tgzUKH5rijqRLliXWpcxjkBfF4bLSR//XtBKhFejo2w6JFlQRZEGfWRnX1EcXHv6w0Oyy/Q==

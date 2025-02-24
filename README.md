@@ -53,14 +53,24 @@
 ## 2. 테이블 구성
 
 ### 사용자 테이블 (users)
-| 컬럼 이름       | 데이터 타입   | 설명            |
-|----------------|--------------|-----------------|
-| id             | INT          | 사용자 고유 ID   |
-| employee_no    | CHAR(5)      | 사번 (5자리)     |
-| password       | VARCHAR(50) | 비밀번호         |
+| 컬럼 이름       | 데이터 타입               | 설명            |
+|----------------|----------------------|-----------------|
+| id             | INT                  | 사용자 고유 ID   |
+| employee_no    | CHAR(5)              | 사번 (5자리)     |
+| password       | VARCHAR(255)         | 비밀번호         |
 | role           | ENUM('ADMIN','USER') | 권한 (admin/user) |
-| created_at     | DATETIME     | 데이터 생성 시간   |
-| updated_at     | DATETIME     | 데이터 수정 시간   |
+| created_at     | DATETIME             | 데이터 생성 시간   |
+| updated_at     | DATETIME             | 데이터 수정 시간   |
+
+```sql
+INSERT INTO users (employee_no, password, role, created_at, updated_at)
+VALUES
+('12345', '$2b$12$L1KmQVskTrCK1hYbMKQ3Y.Ikox7Kqe3KIs7xxLrF71OTq4wXItBz.', 'ADMIN', NOW(), NOW()),
+('23456', '$2a$10$3Z2m6F2FZXFJk7zN.e2RjtXQAkntXvn0jv5q0k4hDQdhz2M9r.Ii.', 'USER', NOW(), NOW()),
+('34567', '$2a$10$KMGyHJpt0XnRmZCuPrlL8KH2FGnX6vYmjpAA1qHG2X7VccXW8PQPa', 'USER', NOW(), NOW()),
+('45678', '$2a$10$7tpIjgA7l8byhpd7VvqosXtCxk5HHRqa0CH7KGG67PUXZPL.iyjWq', 'ADMIN', NOW(), NOW()),
+('56789', '$2a$10$gNYs6tUrLlOrkp5U.ZYmnVnKg2TsfSaHTuAOPxl0XB0iNTfDRwQoa', 'USER', NOW(), NOW());
+```
 
 ### 강연 테이블 (lectures)
 | 컬럼 이름       | 데이터 타입   | 설명              |
