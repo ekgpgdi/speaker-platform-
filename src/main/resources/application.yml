@@ -24,3 +24,6 @@ springdoc:
     path: /api-swagger.html         # Swagger UI ?? ?? ?? =>
     tags-sorter: alpha          # alpha: ??? ? ?? ??, method: HTTP Method ? ??
     operations-sorter: alpha    # alpha: ??? ? ?? ??, method: HTTP Method ? ??
+
+app:
+  jwtSecret: OUQgqBBpggKnxB9tgzUKH5rijqRLliXWpcxjkBfF4bLSR//XtBKhFejo2w6JFlQRZEGfWRnX1EcXHv6w0Oyy/Q==
