@@ -2,6 +2,8 @@ package com.dahye.speakerplatform.common.exception;
 
 import com.dahye.speakerplatform.common.dto.response.ServerResponse;
 import com.dahye.speakerplatform.common.enums.ResponseCode;
+import com.dahye.speakerplatform.common.exception.customException.InvalidException;
+import com.dahye.speakerplatform.common.exception.customException.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -68,4 +70,15 @@ public class GlobalExceptionHandler {
     }
 
     // 사용자 정의 예외 클래스 생성
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ServerResponse<?> customerNotFoundExceptionHandler(HttpServletRequest request, NotFoundException e) {
+        return ServerResponse.errorResponse(ResponseCode.valueOf(e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(InvalidException.class)
+    public ServerResponse<?> invalidPasswordExceptionHandler(HttpServletRequest request, InvalidException e) {
+        return ServerResponse.errorResponse(ResponseCode.valueOf(e.getMessage()));
+    }
 }

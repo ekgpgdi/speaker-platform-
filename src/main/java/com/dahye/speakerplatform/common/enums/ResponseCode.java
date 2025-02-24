@@ -7,7 +7,13 @@ public enum ResponseCode {
     // auth errors
     UNAUTHORIZED("Unauthorized access", true),
     FORBIDDEN("Access forbidden", true),
-    SERVER_ERROR("Internal server error", true);
+    SERVER_ERROR("Internal server error", true),
+
+    // not found
+    NOT_FOUND_USER("User not found.", true),
+
+    // invalid
+    INVALID_PASSWORD("Invalid password.", false);
 
     public final boolean isFatality;
     public final String message;

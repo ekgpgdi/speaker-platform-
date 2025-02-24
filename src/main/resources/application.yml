@@ -8,6 +8,15 @@ spring:
     password: localpw
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        data-loader: 2
+
 # Swagger springdoc-ui Configuration
 springdoc:
   packages-to-scan: com.dahye.speakerplatform
