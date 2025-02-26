@@ -7,9 +7,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
 
 @Schema(description = "강의 생성 요청 모델")
 @Getter
@@ -32,7 +29,7 @@ public class LectureCreateRequest {
 
     @Schema(description = "강연 시작 시간")
     @NotNull(message = "REQUIRED_START_TIME")
-    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$", message = "INVALID_TIME_FORMAT")
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$", message = "INVALID_TIME_FORMAT")
     private String startTime;
 
     @Schema(description = "강연 내역")
