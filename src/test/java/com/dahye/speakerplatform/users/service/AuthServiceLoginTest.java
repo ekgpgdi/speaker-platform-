@@ -42,7 +42,7 @@ public class AuthServiceLoginTest {
         User user = User.builder()
                 .id(1L)
                 .password(password)
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
 
         Mockito.when(userRepository.findByEmployeeNo(employeeNo)).thenReturn(Optional.of(user));
@@ -84,7 +84,7 @@ public class AuthServiceLoginTest {
         User user = User.builder()
                 .id(1L)
                 .password("correctpassword")
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
 
         // Mocking repository와 passwordEncoder
