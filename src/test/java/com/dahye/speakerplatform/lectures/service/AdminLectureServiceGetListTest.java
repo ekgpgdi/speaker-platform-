@@ -37,7 +37,7 @@ public class AdminLectureServiceGetListTest {
         int page = 0;
         int size = 10;
         String sort = "createdAt";
-        String direction = "desc";
+        String direction = "asc";
         Sort.Direction sortDirection = Sort.Direction.fromString(direction.toUpperCase());
 
         List<Lecture> lectureList = new ArrayList<>();

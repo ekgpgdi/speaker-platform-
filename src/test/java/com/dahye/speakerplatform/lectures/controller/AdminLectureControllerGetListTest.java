@@ -46,7 +46,7 @@ public class AdminLectureControllerGetListTest {
         int page = 0;
         int size = 10;
         String sort = "createdAt";
-        String direction = "desc";
+        String direction = "asc";
 
         List<LectureResponse> lectureList = new ArrayList<>();
 

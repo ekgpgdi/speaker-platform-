@@ -37,7 +37,7 @@ public class LectureServiceGetListTest {
         int page = 0;
         int size = 10;
         String sort = "createdAt";
-        String direction = "desc";
+        String direction = "asc";
         Sort.Direction sortDirection = Sort.Direction.fromString(direction.toUpperCase());
 
         List<Lecture> lectureList = new ArrayList<>();
@@ -63,7 +63,7 @@ public class LectureServiceGetListTest {
 
         Page<Lecture> lecturePage = new PageImpl<>(lectureList, PageRequest.of(page, size, Sort.by(sortDirection, sort)), lectureList.size());
 
-        Mockito.when(lectureRepository.findAll(PageRequest.of(page, size, Sort.by(sortDirection, sort))))
+        Mockito.when(lectureRepository.findByStartTimeBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now().plusDays(1), PageRequest.of(page, size, Sort.by(sortDirection, sort))))
                 .thenReturn(lecturePage);
 
         // When

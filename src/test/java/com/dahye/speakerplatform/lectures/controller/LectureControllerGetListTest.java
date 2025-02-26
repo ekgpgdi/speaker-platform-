@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @WithMockUser("TEST_USER")
 public class LectureControllerGetListTest {
-    private final String API_PATH = "/admin/api/v1/lectures";
+    private final String API_PATH = "/api/v1/lectures";
     @Autowired
     private MockMvc mockMvc;
 
