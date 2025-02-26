@@ -35,13 +35,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = token.substring(7);
             Claims claims = jwtService.parseToken(jwt);
 
-            String role = claims.get("role", String.class);
+            String role = claims.get("roles", String.class);
             Long customerId = Long.valueOf(claims.getSubject());
 
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(role));
 
-            if ("ADMIN".equals(role)) {
+            if ("ROLE_ADMIN".equals(role)) {
                 authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
             }
 

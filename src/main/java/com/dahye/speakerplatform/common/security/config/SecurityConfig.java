@@ -38,6 +38,8 @@ public class SecurityConfig {
                                 authorize
                                         .requestMatchers("/api/v1/auth/**", "/api-swagger.html", "/swagger-ui/**", "/api-docs/**")
                                         .permitAll()
+                                        .requestMatchers("/admin/**")
+                                        .hasRole("ADMIN")
                                         .anyRequest()
                                         .authenticated())
                 .exceptionHandling(e -> e.authenticationEntryPoint(customAuthenticationEntryPoint)

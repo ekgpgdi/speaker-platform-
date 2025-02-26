@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,11 +30,7 @@ public class AuthController {
             content = @Content(schema = @Schema(implementation = String.class)))
     @PostMapping("/login")
     public ServerResponse<String> login(
-            @Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
-
-        if (bindingResult != null && bindingResult.hasErrors()) {
-            throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
-        }
+            @Valid @RequestBody LoginRequest loginRequest) {
 
         return ServerResponse.successResponse(
                 authService.login(loginRequest.getEmployeeNo(), loginRequest.getPassword()));
