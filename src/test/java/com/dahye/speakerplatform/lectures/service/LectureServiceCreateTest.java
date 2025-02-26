@@ -24,7 +24,7 @@ public class LectureServiceCreateTest {
 
     @Test
     @DisplayName("강연 생성 성공 테스트")
-    public void testLogin_Success() {
+    public void testLectureCreate_Success() {
         // Given
         LectureCreateRequest lectureCreateRequest = new LectureCreateRequest();
         lectureCreateRequest.setLecturer("박다솔");
