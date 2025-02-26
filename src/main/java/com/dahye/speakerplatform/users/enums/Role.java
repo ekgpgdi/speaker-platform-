@@ -1,5 +1,5 @@
 package com.dahye.speakerplatform.users.enums;
 
 public enum Role {
-    ADMIN, USER
+    ROLE_ADMIN, ROLE_USER
 }
