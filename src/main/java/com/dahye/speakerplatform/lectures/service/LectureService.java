@@ -1,11 +1,13 @@
 package com.dahye.speakerplatform.lectures.service;
 
+import com.dahye.speakerplatform.common.enums.SortDirection;
 import com.dahye.speakerplatform.common.enums.ResponseCode;
 import com.dahye.speakerplatform.common.util.DateUtil;
 import com.dahye.speakerplatform.lectures.domain.Lecture;
 import com.dahye.speakerplatform.lectures.dto.request.LectureCreateRequest;
 import com.dahye.speakerplatform.lectures.dto.response.LectureListResponse;
 import com.dahye.speakerplatform.lectures.dto.response.LectureResponse;
+import com.dahye.speakerplatform.lectures.enums.LectureSort;
 import com.dahye.speakerplatform.lectures.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,20 +56,21 @@ public class LectureService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
-    public LectureListResponse getLectureList(int page, int size, String sort, String direction) {
-        Sort.Direction sortDirection = Sort.Direction.fromString(direction.toUpperCase());
+    public Sort getSort(LectureSort sort, SortDirection direction) {
+        return Sort.by(direction.getDirection(), sort.getFieldName());
+    }
 
-        Page<Lecture> lectureList = lectureRepository.findAll(PageRequest.of(page, size, Sort.by(sortDirection, sort)));
+    @Transactional(readOnly = true)
+    public LectureListResponse getLectureList(int page, int size, LectureSort sort, SortDirection sortDirection) {
+        Page<Lecture> lectureList = lectureRepository.findAll(PageRequest.of(page, size, getSort(sort, sortDirection)));
 
         return makeLectureListResponse(lectureList);
     }
 
     @Transactional(readOnly = true)
-    public LectureListResponse getLectureListByLectureStartTime(int page, int size, String sort, String direction) {
-        Sort.Direction sortDirection = Sort.Direction.fromString(direction.toUpperCase());
-
-        Page<Lecture> lectureList = lectureRepository.findByStartTimeBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now().plusDays(1), PageRequest.of(page, size, Sort.by(sortDirection, sort)));
+    public LectureListResponse getLectureListByLectureStartTime(int page, int size, LectureSort sort, SortDirection sortDirection) {
+        Page<Lecture> lectureList = lectureRepository.findByStartTimeBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now().plusDays(1),
+                PageRequest.of(page, size, getSort(sort, sortDirection)));
 
         return makeLectureListResponse(lectureList);
     }
