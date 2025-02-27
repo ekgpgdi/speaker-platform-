@@ -2,6 +2,7 @@ package com.dahye.speakerplatform.lectures.repository;
 
 import com.dahye.speakerplatform.lectures.domain.Lecture;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
@@ -43,11 +44,13 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
     }
 
     @Override
-    public Page<Lecture> findByStartTimeBetween(LocalDateTime startAt, LocalDateTime endAt, Pageable pageable) {
+    public Page<Lecture> findByStartTimePlusOneDayGreaterThanEqual(LocalDateTime now, Pageable pageable) {
+        // 강연 시작 시간 >= 현재 시간 -1 일
+        BooleanExpression condition = lecture.startTime.goe(now.minusDays(1));
 
         List<Lecture> lectures = queryFactory
                 .selectFrom(lecture)
-                .where(lecture.startTime.between(startAt, endAt))
+                .where(condition)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(getOrderSpecifierBySort(pageable.getSort()))
@@ -56,7 +59,7 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
         long total = queryFactory
                 .select(lecture.count())
                 .from(lecture)
-                .where(lecture.startTime.between(startAt, endAt))
+                .where(condition)
                 .fetchOne();
 
         return new PageImpl<>(lectures, pageable, total);

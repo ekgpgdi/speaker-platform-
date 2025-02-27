@@ -72,8 +72,11 @@ public class LectureService {
 
     @Transactional(readOnly = true)
     public LectureListResponse getLectureListByLectureStartTime(int page, int size, LectureSort sort, SortDirection sortDirection) {
-        Page<Lecture> lectureList = lectureRepository.findByStartTimeBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now().plusDays(1),
-                PageRequest.of(page, size, getSort(sort, sortDirection)));
+        // 강연 시작 시간 + 1일 >= 현재 시간
+        Page<Lecture> lectureList = lectureRepository.findByStartTimePlusOneDayGreaterThanEqual(
+                LocalDateTime.now(),
+                PageRequest.of(page, size, getSort(sort, sortDirection))
+        );
 
         return makeLectureListResponse(lectureList);
     }

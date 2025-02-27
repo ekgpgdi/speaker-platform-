@@ -65,7 +65,7 @@ public class LectureServiceGetListTest {
 
         Page<Lecture> lecturePage = new PageImpl<>(lectureList, PageRequest.of(page, size, Sort.by(direction.getDirection(), sort.getFieldName())), lectureList.size());
 
-        Mockito.when(lectureRepository.findByStartTimeBetween(any(LocalDateTime.class), any(LocalDateTime.class), any(PageRequest.class)))
+        Mockito.when(lectureRepository.findByStartTimePlusOneDayGreaterThanEqual(any(LocalDateTime.class), any(PageRequest.class)))
                 .thenReturn(lecturePage);
 
         // When
