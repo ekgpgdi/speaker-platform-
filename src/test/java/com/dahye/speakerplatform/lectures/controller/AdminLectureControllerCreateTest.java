@@ -4,8 +4,6 @@ import com.dahye.speakerplatform.common.enums.ResponseCode;
 import com.dahye.speakerplatform.common.security.service.JwtService;
 import com.dahye.speakerplatform.lectures.dto.request.LectureCreateRequest;
 import com.dahye.speakerplatform.lectures.service.LectureService;
-import com.dahye.speakerplatform.users.controller.AuthController;
-import com.dahye.speakerplatform.users.dto.request.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AdminLectureController.class)
 @ExtendWith(MockitoExtension.class)
 @WithMockUser("TEST_USER")
-public class LectureControllerCreateTest {
+public class AdminLectureControllerCreateTest {
     private final String API_PATH = "/admin/api/v1/lectures";
     @Autowired
     private MockMvc mockMvc;
@@ -43,25 +41,25 @@ public class LectureControllerCreateTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("강연 생성 성공 테스트")
+    @DisplayName("[ADMIN] 강연 생성 성공 테스트")
     public void createTest() throws Exception {
         // Given
         LectureCreateRequest lectureCreateRequest = new LectureCreateRequest();
         lectureCreateRequest.setLecturer("박다솔");
-        lectureCreateRequest.setLocation("경기도 화성시 남여울2길 4");
+        lectureCreateRequest.setLocation("경기 화성");
         lectureCreateRequest.setCapacity(6);
         lectureCreateRequest.setStartTime("2025-06-01 10:00:00");
         lectureCreateRequest.setContent("체어 + 바렐 : 강의실에 오시면 당일 진행 방식(체어 또는 바렐)을 안내해 드립니다.");
 
-        Mockito.when(lectureService.createLecture(lectureCreateRequest)).thenReturn(ResponseCode.CREATED);
+        Mockito.when(lectureService.createLecture(Mockito.any())).thenReturn(ResponseCode.CREATED);
 
         // When & Then
         mockMvc.perform(post(API_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(lectureCreateRequest))
                         .with(csrf()))
-                .andDo(print()) // 출력
-                .andExpect(status().isCreated()) // 상태 코드가 200 OK인지 확인
-                .andExpect(jsonPath("$.content").value(ResponseCode.CREATED));
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.content").value(ResponseCode.CREATED.toString()));
     }
 }

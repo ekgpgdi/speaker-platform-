@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.naming.AuthenticationException;
@@ -60,6 +61,14 @@ public class GlobalExceptionHandler {
                 "Validation error: {}", e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return ServerResponse.errorResponse(
                 ResponseCode.valueOf(e.getBindingResult().getAllErrors().get(0).getDefaultMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ServerResponse<?> methodArgumentNotValidExceptionHandler(
+            HttpServletRequest request, MethodArgumentTypeMismatchException e) {
+        log.error("Type mismatch error: {}", e.getMessage());
+        return ServerResponse.errorResponse(ResponseCode.INVALID_TYPE);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

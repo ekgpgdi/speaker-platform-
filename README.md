@@ -6,8 +6,47 @@
 1. **강연 목록**  
    - **메소드**: `GET /admin/api/v1/lectures`  
    - **설명**: 전체 강연 목록을 조회합니다.
-   - **요청 파라미터**:   
-   - **응답 예시**:
+- **요청 파라미터**:   
+
+| 이름            | 타입    | 필수 여부 | 기본값   | 설명                                                      |
+|---------------|-------|--------|--------|---------------------------------------------------------|
+| `page`       | `int` | ❌     | `0`    | 조회할 페이지 번호 (0부터 시작)                                     |
+| `size`       | `int` | ❌     | `10`   | 한 페이지에 포함할 강연 개수                                        |
+| `sort`       | `string` | ❌  | `CREATED_AT` | 정렬 기준 (`CAPACITY`, `CURRENT_CAPACITY`, `START_TIME`, `CREATED_AT` ) |
+| `sortDirection` | `string` | ❌ | `DESC`  | 정렬 방향 (`ASC` / `DESC`)                                  |
+
+- **응답 예시**:
+   ```json
+   {
+       "code": "SUCCESS",
+       "content": {
+           "totalPages": 1,
+           "isLast": true,
+           "totalElements": 10,
+           "lectureList": [
+               {
+                   "id": 10,
+                   "lecturer": "최수빈",
+                   "location": "인천 부평",
+                   "capacity": 50,
+                   "currentCapacity": 20,
+                   "startTime": "2025-03-28T19:00:00",
+                   "content": "스타트업 창업 전략"
+               },
+               {
+                   "id": 9,
+                   "lecturer": "박서연",
+                   "location": "서울 송파",
+                   "capacity": 100,
+                   "currentCapacity": 80,
+                   "startTime": "2025-03-25T18:00:00",
+                   "content": "빅데이터 분석과 활용"
+               },
+             ...
+           ]
+       }
+   }
+   ```
 
 2. **강연 등록**  
    - **메소드**: `POST /admin/api/v1/lectures`  
@@ -16,7 +55,7 @@
     ```json 
        {
        "lecturer": "박다솔",
-       "location": "경기도 화성시 남여울2길 4",
+       "location": "경기 화성",
        "capacity": 6,
        "startTime": "2025-06-01 10:00:00",
        "content": "체어 + 바렐 : 강의실에 오시면 당일 진행 방식(체어 또는 바렐)을 안내해 드립니다."
@@ -33,7 +72,47 @@
 1. **강연 목록**  
    - **메소드**: `GET /api/v1/lectures/available`  
    - **설명**: 강연 시작 시간이 1주일 전 ~ 1일 후인 강연들을 노출합니다.
+   - **요청 파라미터**:
+
+| 이름            | 타입    | 필수 여부 | 기본값   | 설명                                                      |
+|---------------|-------|--------|--------|---------------------------------------------------------|
+| `page`       | `int` | ❌     | `0`    | 조회할 페이지 번호 (0부터 시작)                                     |
+| `size`       | `int` | ❌     | `10`   | 한 페이지에 포함할 강연 개수                                        |
+| `sort`       | `string` | ❌  | `CREATED_AT` | 정렬 기준 (`CAPACITY`, `CURRENT_CAPACITY`, `START_TIME`, `CREATED_AT` ) |
+| `sortDirection` | `string` | ❌ | `DESC`  | 정렬 방향 (`ASC` / `DESC`)                                  |
+
    - **응답 예시**:
+   ```json 
+   {
+    "code": "SUCCESS",
+    "content": {
+        "totalPages": 1,
+        "isLast": true,
+        "totalElements": 4,
+        "lectureList": [
+            {
+                "id": 10,
+                "lecturer": "최수빈",
+                "location": "인천 부평",
+                "capacity": 50,
+                "currentCapacity": 20,
+                "startTime": "2025-02-27T23:30:00",
+                "content": "스타트업 창업 전략"
+            },
+            {
+                "id": 9,
+                "lecturer": "박서연",
+                "location": "서울 송파",
+                "capacity": 100,
+                "currentCapacity": 80,
+                "startTime": "2025-02-25T18:00:00",
+                "content": "빅데이터 분석과 활용"
+            },
+            ...
+            ]
+      }
+   }
+   ```
 
 2. **강연 신청**  
    - **메소드**: `POST /api/v1/lectures/{lectureId}/applications`  
@@ -94,6 +173,20 @@ VALUES
 | created_at     | DATETIME     | 데이터 생성 시간   |
 | updated_at     | DATETIME     | 데이터 수정 시간   |
 
+```sql
+INSERT INTO lectures (id, lecturer, location, capacity, current_capacity, start_time, content, created_at, updated_at)
+VALUES
+(1, '홍길동', '서울 강남', 100, 50, '2025-02-01 10:00:00', 'AI 기술의 발전과 미래', NOW(), NOW()),
+(2, '김철수', '서울 종로', 80, 30, '2025-02-05 14:00:00', '데이터 분석의 핵심', NOW(), NOW()),
+(3, '이영희', '서울 강북', 120, 70, '2025-02-10 09:00:00', '프로그래밍 언어 비교', NOW(), NOW()),
+(4, '박지민', '부산 해운대', 200, 150, '2025-02-12 13:00:00', '클라우드 컴퓨팅의 이해', NOW(), NOW()),
+(5, '최민수', '대구 수성구', 60, 25, '2025-02-15 11:00:00', '디지털 마케팅 전략', NOW(), NOW()),
+(6, '정하늘', '서울 서초', 90, 60, '2025-02-18 15:00:00', '모바일 개발의 최신 동향', NOW(), NOW()),
+(7, '김미영', '경기 성남', 150, 100, '2025-02-20 16:00:00', 'UX/UI 디자인 기초', NOW(), NOW()),
+(8, '이상호', '서울 마포', 70, 40, '2025-02-22 17:00:00', '데이터베이스 설계의 기초', NOW(), NOW()),
+(9, '박서연', '서울 송파', 100, 80, '2025-02-25 18:00:00', '빅데이터 분석과 활용', NOW(), NOW()),
+(10, '최수빈', '인천 부평', 50, 20, '2025-02-27 23:30:00', '스타트업 창업 전략', NOW(), NOW());
+```
 ### 신청자 테이블 (applications)
 | 컬럼 이름       | 데이터 타입   | 설명              |
 |----------------|--------------|-------------------|

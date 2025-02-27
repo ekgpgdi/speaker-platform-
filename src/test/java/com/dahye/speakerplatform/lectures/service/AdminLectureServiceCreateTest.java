@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-public class LectureServiceCreateTest {
+public class AdminLectureServiceCreateTest {
     @InjectMocks
     LectureService lectureService;
 
@@ -23,8 +23,8 @@ public class LectureServiceCreateTest {
     LectureRepository lectureRepository;
 
     @Test
-    @DisplayName("강연 생성 성공 테스트")
-    public void testLogin_Success() {
+    @DisplayName("[ADMIN] 강연 생성 성공 테스트")
+    public void testLectureCreate_Success() {
         // Given
         LectureCreateRequest lectureCreateRequest = new LectureCreateRequest();
         lectureCreateRequest.setLecturer("박다솔");

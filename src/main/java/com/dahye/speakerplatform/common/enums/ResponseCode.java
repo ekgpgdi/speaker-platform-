@@ -15,6 +15,7 @@ public enum ResponseCode {
     // invalid
     INVALID_PASSWORD("잘못된 비밀번호입니다."),
     INVALID_TIME_FORMAT("잘못된 데이터 형식입니다."),
+    INVALID_TYPE("옳지 않은 타입입니다."),
 
     // 필수 값 누락
     REQUIRED_EMPLOYEE_NO("사번은 필수 입력값입니다."),
