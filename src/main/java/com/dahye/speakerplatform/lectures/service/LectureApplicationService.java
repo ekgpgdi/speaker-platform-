@@ -1,5 +1,6 @@
 package com.dahye.speakerplatform.lectures.service;
 
+import com.dahye.speakerplatform.lectures.domain.Lecture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,15 +18,17 @@ public class LectureApplicationService {
     /**
      * 강연 생성 시 강연 신청 좌석과 신청 마감 시간을 Redis에 저장하는 메소드.
      *
-     * @param lectureId 강연 ID
-     * @param lectureCapacity 강연 신청 가능 좌석 수
+     * @param lectureId        강연 ID
+     * @param lectureCapacity  강연 신청 가능 좌석 수
      * @param lectureStartTime 강연 신청 마감 시간
      */
     @Transactional
-    public void createLectureRedis(Long lectureId, int lectureCapacity, LocalDateTime lectureStartTime) {
-        String lectureIdStr = Long.toString(lectureId);
+    public void createLectureRedis(Lecture lecture) {
+        int lectureCapacity = lecture.getCapacity();
+        LocalDateTime lectureStartTime = lecture.getStartTime();
+        String lectureIdStr = Long.toString(lecture.getId());
 
-        log.info("Saving lecture {} to Redis with capacity {}", lectureId, lectureCapacity);
+        log.info("Saving lecture {} to Redis with capacity {}", lectureIdStr, lectureCapacity);
         // 강연 신청 가능 좌석 수를 Redis에 저장
         lectureCapacityRedisTemplate.opsForValue().set("lecture:" + lectureIdStr + ":capacity", String.valueOf(lectureCapacity));
 

@@ -25,9 +25,9 @@ public class LectureController {
 
     @Operation(
             summary = "강연 목록 조회",
-            description = "사용자가 강연 시작 시간이 1주일 전 ~ 1일 후인 강연 목록을 확인합니다."
+            description = "사용자가 강연 시작 시간이 `강연 시작 시간 + 1일 >= 현재 시각` 인 강연들을 확인합니다."
     )
-    @ApiResponse(responseCode = "200", description = "페이지 단위로 강연 시작 시간이 1주일 전 ~ 1일 후인 강연 정보가 응답됩니다.",
+    @ApiResponse(responseCode = "200", description = "페이지 단위로 강연 시작 시간이 `강연 시작 시간 + 1일 >= 현재 시각` 인 강연 정보가 응답됩니다.",
             content = @Content(schema = @Schema(implementation = LectureListResponse.class)))
     @GetMapping("")
     public ServerResponse<LectureListResponse> getLectureListByLectureStartTime(@RequestParam(value = "page", defaultValue = "0") int page,

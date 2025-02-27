@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,14 @@ public class LectureService {
 
     @Transactional
     public ResponseCode createLecture(LectureCreateRequest lectureCreateRequest) {
+        Lecture lecture = saveLecture(lectureCreateRequest);
+        lectureApplicationService.createLectureRedis(lecture);
+
+        return ResponseCode.CREATED;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Lecture saveLecture(LectureCreateRequest lectureCreateRequest) {
         Lecture lecture = Lecture.builder()
                 .lecturer(lectureCreateRequest.getLecturer())
                 .location(lectureCreateRequest.getLocation())
@@ -34,11 +43,8 @@ public class LectureService {
                 .currentCapacity(0)
                 .startTime(DateUtil.parseToLocalDateTime(lectureCreateRequest.getStartTime()))
                 .build();
-        lectureRepository.save(lecture);
-
-        lectureApplicationService.createLectureRedis(lecture.getId(), lecture.getCapacity(), lecture.getStartTime());
-
-        return ResponseCode.CREATED;
+        lecture = lectureRepository.save(lecture);
+        return lecture;
     }
 
     @Transactional(readOnly = true)
