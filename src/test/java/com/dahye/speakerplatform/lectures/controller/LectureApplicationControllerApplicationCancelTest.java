@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(LectureApplicationController.class)
 @ExtendWith(MockitoExtension.class)
 @WithMockUser("TEST_USER")
-public class LectureControllerApplicationCancelTest {
+public class LectureApplicationControllerApplicationCancelTest {
     private final String API_PATH = "/api/v1/lectures/{lectureId}/applications/{applicationId}";
     @Autowired
     private MockMvc mockMvc;

@@ -34,4 +34,18 @@ public class LectureController {
         return ServerResponse.successResponse(
                 lectureService.getLectureListByLectureStartTime(page, size, sort, sortDirection));
     }
+
+    @Operation(
+            summary = "인기 강연 목록 조회",
+            description = "사용자가 최근 n 일간 가장 신청이 많은 강연들을 확인합니다."
+    )
+    @ApiResponse(responseCode = "200", description = "페이지 단위로 최근 n 일간 가장 신청이 많은 강연 정보가 응답됩니다.",
+            content = @Content(schema = @Schema(implementation = LectureListResponse.class)))
+    @GetMapping("/popular")
+    public ServerResponse<LectureListResponse> getPopularLectureListByApplicationCount(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                                                       @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                                       @RequestParam(value = "periodDays", defaultValue = "3") int periodDays) {
+        return ServerResponse.successResponse(
+                lectureService.getPopularLectureListByApplicationCount(page, size, periodDays));
+    }
 }

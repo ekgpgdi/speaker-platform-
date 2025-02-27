@@ -8,4 +8,6 @@ import java.time.LocalDateTime;
 
 public interface LectureRepositoryCustom {
     Page<Lecture> findByStartTimePlusOneDayGreaterThanEqual(LocalDateTime now, Pageable pageable);
+
+    Page<Lecture> findPopularLectures(int periodDays, Pageable pageable);
 }
