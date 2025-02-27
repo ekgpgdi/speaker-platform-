@@ -178,12 +178,14 @@ public class LectureApplicationService {
     @Transactional
     public boolean saveApplicationsToDatabase(Long lectureId, Set<String> newApplications) {
         String existingKey = "lecture:" + lectureId + ":applications";
-        Optional<Lecture> lecture = lectureRepository.findById(lectureId);
+        Optional<Lecture> lectureOptional = lectureRepository.findById(lectureId);
 
-        if (lecture.isEmpty()) {
+        if (lectureOptional.isEmpty()) {
             log.error("Lecture with ID {} not found", lectureId);
             return false;
         }
+
+        Lecture lecture = lectureOptional.get();
 
         int batchSize = 100;
         int count = 0;
@@ -193,7 +195,7 @@ public class LectureApplicationService {
             userApplicationRedisTemplate.opsForSet().add(existingKey, applicant);
 
             applicationList.add(Application.builder()
-                    .lecture(lecture.get())
+                    .lecture(lecture)
                     .employeeNo(applicant)
                     .build());
 
@@ -209,6 +211,7 @@ public class LectureApplicationService {
         if (!applicationList.isEmpty()) {
             applicationRepository.saveAll(applicationList);
         }
+        lecture.setCurrentCapacity(lecture.getCurrentCapacity() + newApplications.size());
 
         return true;
     }
