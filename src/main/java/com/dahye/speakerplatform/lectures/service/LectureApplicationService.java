@@ -1,12 +1,18 @@
 package com.dahye.speakerplatform.lectures.service;
 
 import com.dahye.speakerplatform.common.enums.ResponseCode;
+import com.dahye.speakerplatform.common.enums.SortDirection;
+import com.dahye.speakerplatform.common.exception.customException.ApplicationException;
 import com.dahye.speakerplatform.lectures.domain.Application;
 import com.dahye.speakerplatform.lectures.domain.Lecture;
+import com.dahye.speakerplatform.lectures.dto.response.LectureApplicationListResponse;
+import com.dahye.speakerplatform.lectures.dto.response.LectureApplicationResponse;
+import com.dahye.speakerplatform.lectures.enums.LectureApplicationSort;
 import com.dahye.speakerplatform.lectures.repository.ApplicationRepository;
 import com.dahye.speakerplatform.lectures.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
@@ -223,10 +229,10 @@ public class LectureApplicationService {
     }
 
     @Transactional
-    public ResponseCode cancelApplication(Long lectureId, Long applicationId) {
+    public ResponseCode cancel(Long lectureId, Long applicationId) {
         Optional<Application> applicationOptional = get(applicationId);
 
-        if (applicationOptional.isEmpty()) return ResponseCode.NOT_FOUND_APPLICATION;
+        if (applicationOptional.isEmpty()) throw new ApplicationException(ResponseCode.NOT_FOUND_APPLICATION);
         applicationRepository.delete(applicationOptional.get());
 
         String redisKey = "lecture:" + lectureId + ":applications";
@@ -235,5 +241,47 @@ public class LectureApplicationService {
         int currentCapacity = applicationOptional.get().getLecture().getCurrentCapacity();
         applicationOptional.get().getLecture().setCurrentCapacity(currentCapacity - 1);
         return ResponseCode.SUCCESS;
+    }
+
+
+    @Transactional(readOnly = true)
+    public LectureApplicationListResponse getLectureApplicationListByLectureStartTime(int page, int size, String employeeNo, LectureApplicationSort sort, SortDirection sortDirection) {
+        Page<LectureApplicationResponse> lectureApplicationResponseList = applicationRepository.getLectureApplicationListByLectureStartTime(page, size, employeeNo, sort, sortDirection);
+        return LectureApplicationListResponse.builder()
+                .lectureApplicationList(lectureApplicationResponseList.getContent())
+                .totalElements(lectureApplicationResponseList.getTotalElements())
+                .totalPages(lectureApplicationResponseList.getTotalPages())
+                .isLast(lectureApplicationResponseList.isLast())
+                .build();
+    }
+
+    @Transactional
+    public ResponseCode apply(Long lectureId, String employeeNo) {
+        // 1. 신청 가능한 강연인지 - 신청 가능한 시간
+        boolean isApplicationTimeValid = isApplicationTimeValid(lectureId);
+        if (!isApplicationTimeValid) {
+            throw new ApplicationException(ResponseCode.INVALID_LECTURE_TIME);
+        }
+
+        // 2. 신청 가능한 강연인지 - 신청 가능한 자리가 남았는지
+        boolean isCapacityAvailable = isCapacityAvailable(lectureId);
+        if (!isCapacityAvailable) {
+            throw new ApplicationException(ResponseCode.NO_CAPACITY_AVAILABLE);
+        }
+
+        // 3. 중복 신청 확인
+        boolean isAlreadyApplied = isAlreadyApplied(lectureId, employeeNo);
+        if (isAlreadyApplied) {
+            throw new ApplicationException(ResponseCode.DUPLICATE_APPLICATION);
+        }
+
+        // 3. 신청 내역 저장
+        ResponseCode responseCode = saveApplication(lectureId, employeeNo);
+
+        if (responseCode != ResponseCode.SUCCESS) {
+            throw new ApplicationException(responseCode);
+        }
+
+        return ResponseCode.CREATED;
     }
 }

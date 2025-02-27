@@ -1,6 +1,7 @@
 package com.dahye.speakerplatform.lectures.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
 public class LectureResponse {
     @Schema(description = "강연 ID")
     private Long id;
