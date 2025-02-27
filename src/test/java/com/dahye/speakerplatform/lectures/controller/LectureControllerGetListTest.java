@@ -1,8 +1,10 @@
 package com.dahye.speakerplatform.lectures.controller;
 
+import com.dahye.speakerplatform.common.enums.SortDirection;
 import com.dahye.speakerplatform.common.security.service.JwtService;
 import com.dahye.speakerplatform.lectures.dto.response.LectureListResponse;
 import com.dahye.speakerplatform.lectures.dto.response.LectureResponse;
+import com.dahye.speakerplatform.lectures.enums.LectureSort;
 import com.dahye.speakerplatform.lectures.service.LectureService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,13 +47,11 @@ public class LectureControllerGetListTest {
         // Given
         int page = 0;
         int size = 10;
-        String sort = "createdAt";
-        String direction = "desc";
 
         List<LectureResponse> lectureList = new ArrayList<>();
 
         lectureList.add(LectureResponse.builder()
-                .id(1L)
+                .id(2L)
                 .lecturer("홍길동")
                 .location("서울 강남")
                 .capacity(100)
@@ -61,7 +61,7 @@ public class LectureControllerGetListTest {
                 .build());
 
         lectureList.add(LectureResponse.builder()
-                .id(2L)
+                .id(1L)
                 .lecturer("김철수")
                 .location("서울 종로")
                 .capacity(80)
@@ -70,7 +70,7 @@ public class LectureControllerGetListTest {
                 .content("데이터 분석의 핵심")
                 .build());
 
-        Mockito.when(lectureService.getLectureList(page, size, sort, direction))
+        Mockito.when(lectureService.getLectureListByLectureStartTime(page, size, LectureSort.CREATED_AT, SortDirection.DESC))
                 .thenReturn(LectureListResponse.builder()
                         .lectureList(lectureList)
                         .totalElements(2)
@@ -86,12 +86,12 @@ public class LectureControllerGetListTest {
                 .andExpect(jsonPath("$.content.totalElements").value(2))
                 .andExpect(jsonPath("$.content.totalPages").value(1))
                 .andExpect(jsonPath("$.content.isLast").value(true))
-                .andExpect(jsonPath("$.content.lectureList[0].id").value(1))
+                .andExpect(jsonPath("$.content.lectureList[0].id").value(2))
                 .andExpect(jsonPath("$.content.lectureList[0].lecturer").value("홍길동"))
                 .andExpect(jsonPath("$.content.lectureList[0].location").value("서울 강남"))
                 .andExpect(jsonPath("$.content.lectureList[0].startTime").value("2025-03-01T10:00:00"))
                 .andExpect(jsonPath("$.content.lectureList[0].content").value("AI 기술의 발전과 미래"))
-                .andExpect(jsonPath("$.content.lectureList[1].id").value(2))
+                .andExpect(jsonPath("$.content.lectureList[1].id").value(1))
                 .andExpect(jsonPath("$.content.lectureList[1].lecturer").value("김철수"))
                 .andExpect(jsonPath("$.content.lectureList[1].location").value("서울 종로"))
                 .andExpect(jsonPath("$.content.lectureList[1].startTime").value("2025-03-05T14:00:00"))
