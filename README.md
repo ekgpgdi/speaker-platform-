@@ -118,13 +118,17 @@
    - **메소드**: `POST /api/v1/lectures/{lectureId}/applications`  
    - **설명**: 사번을 입력 받아 신청을 받습니다. 같은 강연에 중복 신청은 불가능합니다.
    - **요청 바디**:
+   ```json
+   {
+    "employeeNo" : "12345"
+   }
+   ```
 
 3. **신청 내역 조회**  
    - **메소드**: `GET /api/v1/lectures/applications`  
    - **설명**: 입력된 사번으로 신청한 강연 목록을 조회합니다. (강연 시작 시간이 1주일 전 ~ 1일 후인 강연들을 노출합니다.)
    - **요청 파라미터**: `employee_number`  
    - **응답 예시**:
-    
 
 4. **신청한 강연 취소**  
    - **메소드**: `DELETE /api/v1/lectures/{lectureId}/applications/{applicationId}`  
