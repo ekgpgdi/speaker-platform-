@@ -2,10 +2,16 @@ package com.dahye.speakerplatform.lectures.domain;
 
 import com.dahye.speakerplatform.common.domain.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "applications")
 public class Application extends BaseTimeEntity {
 

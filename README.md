@@ -134,6 +134,12 @@
    - **메소드**: `DELETE /api/v1/lectures/{lectureId}/applications/{applicationId}`  
    - **설명**: 강연 신청을 취소합니다.
    - **응답 예시**:
+   ```json
+   {
+    "code": "SUCCESS",
+    "content": "SUCCESS"
+   }
+   ```
 
 5. **실시간 인기 강연**  
    - **메소드**: `GET /api/v1/lectures/popular`  
