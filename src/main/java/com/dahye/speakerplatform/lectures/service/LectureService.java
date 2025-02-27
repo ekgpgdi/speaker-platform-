@@ -86,4 +86,15 @@ public class LectureService {
 
         return makeLectureListResponse(lectureList);
     }
+
+
+    @Transactional(readOnly = true)
+    public LectureListResponse getPopularLectureListByApplicationCount(int page, int size, int periodDays) {
+        Page<Lecture> lectureList = lectureRepository.findPopularLectures(
+                periodDays,
+                PageRequest.of(page, size)
+        );
+
+        return makeLectureListResponse(lectureList);
+    }
 }
