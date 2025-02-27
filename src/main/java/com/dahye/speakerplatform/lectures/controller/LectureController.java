@@ -1,7 +1,9 @@
 package com.dahye.speakerplatform.lectures.controller;
 
 import com.dahye.speakerplatform.common.dto.response.ServerResponse;
+import com.dahye.speakerplatform.common.enums.ResponseCode;
 import com.dahye.speakerplatform.common.enums.SortDirection;
+import com.dahye.speakerplatform.lectures.dto.request.EmployeeNoRequest;
 import com.dahye.speakerplatform.lectures.dto.response.LectureListResponse;
 import com.dahye.speakerplatform.lectures.enums.LectureSort;
 import com.dahye.speakerplatform.lectures.service.LectureService;
@@ -11,10 +13,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "LECTURES")
 @RestController
@@ -36,5 +36,23 @@ public class LectureController {
                                                                                 @RequestParam(value = "sortDirection", defaultValue = "DESC") SortDirection sortDirection) {
         return ServerResponse.successResponse(
                 lectureService.getLectureListByLectureStartTime(page, size, sort, sortDirection));
+    }
+
+    @Operation(
+            summary = "강연 신청",
+            description = "사번을 입력 받아 강연에 신청합니다. 중복 신청은 불가능합니다."
+    )
+    @ApiResponse(responseCode = "200", description = "강연 신청 성공 ResponseCode = CREATED \n " +
+            "강연 신청 실패 \n" +
+            "1. 신청 불가능한 시간 = INVALID_LECTURE_TIME \n" +
+            "2. 신청 가능한 자리 부족 = NO_CAPACITY_AVAILABLE \n" +
+            "3. 중복 신청 = DUPLICATE_APPLICATION",
+            content = @Content(schema = @Schema(implementation = ResponseCode.class)))
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{lectureId}/applications")
+    public ServerResponse<ResponseCode> applyForLecture(@PathVariable Long lectureId,
+                                                        @RequestBody EmployeeNoRequest employeeNoRequest) {
+
+        return ServerResponse.successResponse(lectureService.apply(lectureId, employeeNoRequest.getEmployeeNo()));
     }
 }
