@@ -212,7 +212,28 @@ public class LectureApplicationService {
             applicationRepository.saveAll(applicationList);
         }
         lecture.setCurrentCapacity(lecture.getCurrentCapacity() + newApplications.size());
+        lectureRepository.save(lecture);
 
         return true;
+    }
+
+    @Transactional
+    public Optional<Application> get(Long applicationId) {
+        return applicationRepository.findById(applicationId);
+    }
+
+    @Transactional
+    public ResponseCode cancelApplication(Long lectureId, Long applicationId) {
+        Optional<Application> applicationOptional = get(applicationId);
+
+        if (applicationOptional.isEmpty()) return ResponseCode.NOT_FOUND_APPLICATION;
+        applicationRepository.delete(applicationOptional.get());
+
+        String redisKey = "lecture:" + lectureId + ":applications";
+        userApplicationRedisTemplate.opsForSet().remove(redisKey, String.valueOf(applicationId));
+
+        int currentCapacity = applicationOptional.get().getLecture().getCurrentCapacity();
+        applicationOptional.get().getLecture().setCurrentCapacity(currentCapacity - 1);
+        return ResponseCode.SUCCESS;
     }
 }

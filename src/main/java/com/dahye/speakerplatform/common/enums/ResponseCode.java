@@ -29,7 +29,8 @@ public enum ResponseCode {
     // applied
     INVALID_LECTURE_TIME("불가능한 시간입니다"),
     DUPLICATE_APPLICATION("이미 신청한 강연입니다."),
-    NO_CAPACITY_AVAILABLE("신청 가능한 자리가 없습니다.");
+    NO_CAPACITY_AVAILABLE("신청 가능한 자리가 없습니다."),
+    NOT_FOUND_APPLICATION("신청 내역을 찾을 수 없습니다");
 
     public final String message;
 

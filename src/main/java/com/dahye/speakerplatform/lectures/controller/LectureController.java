@@ -55,4 +55,17 @@ public class LectureController {
 
         return ServerResponse.successResponse(lectureService.apply(lectureId, employeeNoRequest.getEmployeeNo()));
     }
+
+    @Operation(
+            summary = "강연 신청 취소",
+            description = "신청 ID 를 통해 강연 신청을 취소합니다."
+    )
+    @ApiResponse(responseCode = "200", description = "강연 신청 취소 성공 ResponseCode = SUCCESS ",
+            content = @Content(schema = @Schema(implementation = ResponseCode.class)))
+    @DeleteMapping("/{lectureId}/applications/{applicationId}")
+    public ServerResponse<ResponseCode> cancelForLecture(@PathVariable Long lectureId,
+                                                         @PathVariable Long applicationId) {
+
+        return ServerResponse.successResponse(lectureService.cancel(lectureId, applicationId));
+    }
 }

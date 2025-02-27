@@ -118,4 +118,12 @@ public class LectureService {
 
         return ResponseCode.CREATED;
     }
+
+    @Transactional
+    public ResponseCode cancel(Long lectureId, Long applicationId) {
+        ResponseCode responseCode = lectureApplicationService.cancelApplication(lectureId, applicationId);
+        if (!responseCode.equals(ResponseCode.SUCCESS)) throw new ApplicationException(responseCode);
+
+        return responseCode;
+    }
 }
