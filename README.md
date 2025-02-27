@@ -183,11 +183,42 @@
    }
    ```
 
-5. **실시간 인기 강연**  
+5. **기간 내 인기 강연**  
    - **메소드**: `GET /api/v1/lectures/popular`  
-   - **설명**: 최근 3일간 가장 신청이 많은 강연 순으로 조회합니다.
-   - **요청 파라미터**: `period-days=3`
+   - **설명**: 최근 n일간 가장 신청이 많은 강연 순으로 조회합니다.
+   - **요청 파라미터**: `periodDays=3`
    - **응답 예시**:
+   ```json
+   {
+    "code": "SUCCESS",
+    "content": {
+        "totalPages": 2,
+        "isLast": false,
+        "totalElements": 15,
+        "lectureList": [
+            {
+                "id": 10,
+                "lecturer": "최수빈",
+                "location": "인천 부평",
+                "capacity": 50,
+                "currentCapacity": 20,
+                "startTime": "2025-03-01T23:30:00",
+                "content": "스타트업 창업 전략"
+            },
+            {
+                "id": 1,
+                "lecturer": "홍길동",
+                "location": "서울 강남",
+                "capacity": 100,
+                "currentCapacity": 50,
+                "startTime": "2025-02-26T19:00:00",
+                "content": "AI 기술의 발전과 미래"
+            },
+          ...
+            ]
+        }
+    }
+   ```
 
 
 ## 2. 테이블 구성
