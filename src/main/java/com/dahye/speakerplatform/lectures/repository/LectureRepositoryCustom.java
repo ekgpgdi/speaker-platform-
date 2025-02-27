@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 
 public interface LectureRepositoryCustom {
-    Page<Lecture> findByStartTimeBetween(LocalDateTime minusWeeks, LocalDateTime plusDays, Pageable pageable);
+    Page<Lecture> findByStartTimePlusOneDayGreaterThanEqual(LocalDateTime now, Pageable pageable);
 }

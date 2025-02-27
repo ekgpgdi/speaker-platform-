@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AdminLectureController.class)
+@WebMvcTest(LectureController.class)
 @ExtendWith(MockitoExtension.class)
 @WithMockUser("TEST_USER")
 public class LectureControllerGetListTest {
@@ -76,10 +76,8 @@ public class LectureControllerGetListTest {
                         .totalElements(2)
                         .totalPages(1)
                         .isLast(true)
-                        .build()
-                );
+                        .build());
 
-        // When & Then
         mockMvc.perform(get(API_PATH).with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -24,7 +24,12 @@ public enum ResponseCode {
     REQUIRED_LOCATION("강연장 정보는 필수 입력값입니다."),
     REQUIRED_CAPACITY("신청 가능 인원 수는 필수 입력값입니다."),
     REQUIRED_START_TIME("강연 시작 시간은 필수 입력값입니다."),
-    REQUIRED_CONTENT("강연 내역 시간은 필수 입력값입니다.");
+    REQUIRED_CONTENT("강연 내역 시간은 필수 입력값입니다."),
+
+    // applied
+    INVALID_LECTURE_TIME("불가능한 시간입니다"),
+    DUPLICATE_APPLICATION("이미 신청한 강연입니다."),
+    NO_CAPACITY_AVAILABLE("신청 가능한 자리가 없습니다.");
 
     public final String message;
 

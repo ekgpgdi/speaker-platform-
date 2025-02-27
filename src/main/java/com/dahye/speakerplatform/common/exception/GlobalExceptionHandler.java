@@ -2,6 +2,7 @@ package com.dahye.speakerplatform.common.exception;
 
 import com.dahye.speakerplatform.common.dto.response.ServerResponse;
 import com.dahye.speakerplatform.common.enums.ResponseCode;
+import com.dahye.speakerplatform.common.exception.customException.ApplicationException;
 import com.dahye.speakerplatform.common.exception.customException.InvalidException;
 import com.dahye.speakerplatform.common.exception.customException.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -88,6 +89,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidException.class)
     public ServerResponse<?> invalidPasswordExceptionHandler(HttpServletRequest request, InvalidException e) {
+        return ServerResponse.errorResponse(ResponseCode.valueOf(e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ApplicationException.class)
+    public ServerResponse<?> applicationExceptionHandler(HttpServletRequest request, ApplicationException e) {
         return ServerResponse.errorResponse(ResponseCode.valueOf(e.getMessage()));
     }
 }
