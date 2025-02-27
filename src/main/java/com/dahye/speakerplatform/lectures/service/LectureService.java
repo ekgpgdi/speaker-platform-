@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class LectureService {
     private final LectureRepository lectureRepository;
+    private final LectureApplicationService lectureApplicationService;
 
     @Transactional
     public ResponseCode createLecture(LectureCreateRequest lectureCreateRequest) {
@@ -34,6 +35,8 @@ public class LectureService {
                 .startTime(DateUtil.parseToLocalDateTime(lectureCreateRequest.getStartTime()))
                 .build();
         lectureRepository.save(lecture);
+
+        lectureApplicationService.createLectureRedis(lecture.getId(), lecture.getCapacity(), lecture.getStartTime());
 
         return ResponseCode.CREATED;
     }

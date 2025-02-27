@@ -9,9 +9,9 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 @Configuration
 public class RedisConfig {
 
-    // lectureSeatsRedisTemplate : 강연 좌석 및 강연 신청 마감 시간 관리용
-    @Bean(name = "lectureSeatsRedisTemplate")
-    public RedisTemplate<String, String> lectureSeatsRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    // lectureCapacityRedisTemplate : 강연 좌석 및 강연 신청 마감 시간 관리용
+    @Bean(name = "lectureCapacityRedisTemplate")
+    public RedisTemplate<String, String> lectureCapacityRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(RedisSerializer.string());
