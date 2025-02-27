@@ -9,7 +9,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 @Configuration
 public class RedisConfig {
 
-    // 첫 번째 RedisTemplate: 강연 좌석 관리용
+    // lectureSeatsRedisTemplate : 강연 좌석 및 강연 신청 마감 시간 관리용
     @Bean(name = "lectureSeatsRedisTemplate")
     public RedisTemplate<String, String> lectureSeatsRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
@@ -21,7 +21,7 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-    // 두 번째 RedisTemplate: 유저 신청 관리용
+    // userApplicationRedisTemplate : 유저 신청 관리용
     @Bean(name = "userApplicationRedisTemplate")
     public RedisTemplate<String, String> userApplicationRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
