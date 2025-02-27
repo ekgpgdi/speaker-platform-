@@ -1,6 +1,7 @@
 package com.dahye.speakerplatform.lectures.service;
 
 import com.dahye.speakerplatform.common.enums.ResponseCode;
+import com.dahye.speakerplatform.common.exception.customException.ApplicationException;
 import com.dahye.speakerplatform.lectures.domain.Application;
 import com.dahye.speakerplatform.lectures.domain.Lecture;
 import com.dahye.speakerplatform.lectures.repository.ApplicationRepository;
@@ -17,6 +18,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class LectureApplicationServiceCancelTest {
@@ -57,7 +59,7 @@ public class LectureApplicationServiceCancelTest {
         Mockito.doNothing().when(applicationRepository).delete(Mockito.any(Application.class));
 
         // 메서드 실행
-        ResponseCode result = lectureApplicationService.cancelApplication(lectureId, applicationId);
+        ResponseCode result = lectureApplicationService.cancel(lectureId, applicationId);
 
         assertEquals(ResponseCode.SUCCESS, result);
         assertEquals(9, application.getLecture().getCurrentCapacity());
@@ -72,8 +74,10 @@ public class LectureApplicationServiceCancelTest {
         Mockito.when(applicationRepository.findById(applicationId))
                 .thenReturn(Optional.empty());
         // When
-        ResponseCode result = lectureApplicationService.cancelApplication(lectureId, applicationId);
+        ApplicationException thrown = assertThrows(ApplicationException.class, () -> {
+            lectureApplicationService.cancel(lectureId, applicationId);
+        });
 
-        assertEquals(ResponseCode.NOT_FOUND_APPLICATION, result);
+        assertEquals(ResponseCode.NOT_FOUND_APPLICATION.toString(), thrown.getMessage());
     }
 }

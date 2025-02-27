@@ -3,7 +3,7 @@ package com.dahye.speakerplatform.lectures.controller;
 import com.dahye.speakerplatform.common.enums.ResponseCode;
 import com.dahye.speakerplatform.common.exception.customException.ApplicationException;
 import com.dahye.speakerplatform.common.security.service.JwtService;
-import com.dahye.speakerplatform.lectures.service.LectureService;
+import com.dahye.speakerplatform.lectures.service.LectureApplicationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(LectureController.class)
+@WebMvcTest(LectureApplicationController.class)
 @ExtendWith(MockitoExtension.class)
 @WithMockUser("TEST_USER")
 public class LectureControllerApplicationCancelTest {
@@ -30,7 +30,7 @@ public class LectureControllerApplicationCancelTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private LectureService lectureService;
+    private LectureApplicationService lectureApplicationService;
 
     @MockitoBean
     private JwtService jwtService;
@@ -44,7 +44,7 @@ public class LectureControllerApplicationCancelTest {
         Long lectureId = 1L;
         Long applicationId = 1L;
 
-        Mockito.when(lectureService.cancel(lectureId, applicationId)).thenReturn(ResponseCode.SUCCESS);
+        Mockito.when(lectureApplicationService.cancel(lectureId, applicationId)).thenReturn(ResponseCode.SUCCESS);
 
         mockMvc.perform(delete(API_PATH, lectureId, applicationId)
                         .with(csrf()))
@@ -58,7 +58,7 @@ public class LectureControllerApplicationCancelTest {
         Long lectureId = 1L;
         Long applicationId = 1L;
 
-        Mockito.when(lectureService.cancel(lectureId, applicationId)).thenThrow(new ApplicationException(ResponseCode.NOT_FOUND_APPLICATION));
+        Mockito.when(lectureApplicationService.cancel(lectureId, applicationId)).thenThrow(new ApplicationException(ResponseCode.NOT_FOUND_APPLICATION));
 
         mockMvc.perform(delete(API_PATH, lectureId, applicationId)
                         .with(csrf()))
