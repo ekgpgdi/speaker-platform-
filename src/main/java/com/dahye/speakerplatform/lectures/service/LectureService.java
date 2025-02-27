@@ -1,9 +1,7 @@
 package com.dahye.speakerplatform.lectures.service;
 
-import com.dahye.speakerplatform.common.dto.response.ServerResponse;
-import com.dahye.speakerplatform.common.enums.SortDirection;
 import com.dahye.speakerplatform.common.enums.ResponseCode;
-import com.dahye.speakerplatform.common.exception.customException.ApplicationException;
+import com.dahye.speakerplatform.common.enums.SortDirection;
 import com.dahye.speakerplatform.common.util.DateUtil;
 import com.dahye.speakerplatform.lectures.domain.Lecture;
 import com.dahye.speakerplatform.lectures.dto.request.LectureCreateRequest;
@@ -52,7 +50,7 @@ public class LectureService {
     @Transactional(readOnly = true)
     public LectureListResponse makeLectureListResponse(Page<Lecture> lectureList) {
         return LectureListResponse.builder()
-                .lectureList(lectureList.stream().map(lecture -> LectureResponse.builder()
+                .lectureList(lectureList.getContent().stream().map(lecture -> LectureResponse.builder()
                         .id(lecture.getId())
                         .lecturer(lecture.getLecturer())
                         .location(lecture.getLocation())
@@ -87,43 +85,5 @@ public class LectureService {
         );
 
         return makeLectureListResponse(lectureList);
-    }
-
-    @Transactional
-    public ResponseCode apply(Long lectureId, String employeeNo) {
-        // 1. 신청 가능한 강연인지 - 신청 가능한 시간
-        boolean isApplicationTimeValid = lectureApplicationService.isApplicationTimeValid(lectureId);
-        if (!isApplicationTimeValid) {
-            throw new ApplicationException(ResponseCode.INVALID_LECTURE_TIME);
-        }
-
-        // 2. 신청 가능한 강연인지 - 신청 가능한 자리가 남았는지
-        boolean isCapacityAvailable = lectureApplicationService.isCapacityAvailable(lectureId);
-        if (!isCapacityAvailable) {
-            throw new ApplicationException(ResponseCode.NO_CAPACITY_AVAILABLE);
-        }
-
-        // 3. 중복 신청 확인
-        boolean isAlreadyApplied = lectureApplicationService.isAlreadyApplied(lectureId, employeeNo);
-        if (isAlreadyApplied) {
-            throw new ApplicationException(ResponseCode.DUPLICATE_APPLICATION);
-        }
-
-        // 3. 신청 내역 저장
-        ResponseCode responseCode = lectureApplicationService.saveApplication(lectureId, employeeNo);
-
-        if (responseCode != ResponseCode.SUCCESS) {
-            throw new ApplicationException(responseCode);
-        }
-
-        return ResponseCode.CREATED;
-    }
-
-    @Transactional
-    public ResponseCode cancel(Long lectureId, Long applicationId) {
-        ResponseCode responseCode = lectureApplicationService.cancelApplication(lectureId, applicationId);
-        if (!responseCode.equals(ResponseCode.SUCCESS)) throw new ApplicationException(responseCode);
-
-        return responseCode;
     }
 }

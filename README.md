@@ -127,8 +127,50 @@
 3. **신청 내역 조회**  
    - **메소드**: `GET /api/v1/lectures/applications`  
    - **설명**: 입력된 사번으로 신청한 강연 목록을 조회합니다. (강연 시작 시간이 1주일 전 ~ 1일 후인 강연들을 노출합니다.)
-   - **요청 파라미터**: `employee_number`  
+   - **요청 파라미터**: `employee-no`  
    - **응답 예시**:
+   ```json
+   {
+    "code": "SUCCESS",
+    "content": {
+        "totalPages": 3,
+        "isLast": false,
+        "totalElements": 30,
+        "lectureApplicationList": [
+            {
+                "id": 3,
+                "lecturer": "이영희",
+                "location": "서울 강북",
+                "capacity": 120,
+                "currentCapacity": 70,
+                "startTime": "2025-02-28T11:00:00",
+                "content": "프로그래밍 언어 비교",
+                "applicationId": 8
+            },
+            {
+                "id": 2,
+                "lecturer": "김철수",
+                "location": "서울 종로",
+                "capacity": 80,
+                "currentCapacity": 30,
+                "startTime": "2025-02-27T11:00:00",
+                "content": "데이터 분석의 핵심",
+                "applicationId": 7
+            },
+            {
+                "id": 1,
+                "lecturer": "홍길동",
+                "location": "서울 강남",
+                "capacity": 100,
+                "currentCapacity": 50,
+                "startTime": "2025-02-26T19:00:00",
+                "content": "AI 기술의 발전과 미래",
+                "applicationId": 6
+            }
+            ]
+        }
+    }
+   ```
 
 4. **신청한 강연 취소**  
    - **메소드**: `DELETE /api/v1/lectures/{lectureId}/applications/{applicationId}`  

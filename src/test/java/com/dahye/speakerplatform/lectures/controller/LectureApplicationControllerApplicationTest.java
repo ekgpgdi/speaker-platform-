@@ -4,7 +4,7 @@ import com.dahye.speakerplatform.common.enums.ResponseCode;
 import com.dahye.speakerplatform.common.exception.customException.ApplicationException;
 import com.dahye.speakerplatform.common.security.service.JwtService;
 import com.dahye.speakerplatform.lectures.dto.request.EmployeeNoRequest;
-import com.dahye.speakerplatform.lectures.service.LectureService;
+import com.dahye.speakerplatform.lectures.service.LectureApplicationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,16 +25,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(LectureController.class)
+@WebMvcTest(LectureApplicationController.class)
 @ExtendWith(MockitoExtension.class)
 @WithMockUser("TEST_USER")
-public class LectureControllerApplicationTest {
+public class LectureApplicationControllerApplicationTest {
     private final String API_PATH = "/api/v1/lectures/{lectureId}/applications";
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private LectureService lectureService;
+    private LectureApplicationService lectureApplicationService;
 
     @MockitoBean
     private JwtService jwtService;
@@ -49,7 +49,7 @@ public class LectureControllerApplicationTest {
         String employeeNo = "12345";
         EmployeeNoRequest employeeNoRequest = new EmployeeNoRequest(employeeNo);
 
-        Mockito.when(lectureService.apply(lectureId, employeeNo)).thenReturn(ResponseCode.CREATED);
+        Mockito.when(lectureApplicationService.apply(lectureId, employeeNo)).thenReturn(ResponseCode.CREATED);
 
         mockMvc.perform(post(API_PATH, lectureId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +58,7 @@ public class LectureControllerApplicationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.content").value(ResponseCode.CREATED.toString()));
 
-        verify(lectureService).apply(lectureId, employeeNo); // 서비스 메서드 호출 확인
+        verify(lectureApplicationService).apply(lectureId, employeeNo); // 서비스 메서드 호출 확인
     }
 
     @Test
@@ -68,7 +68,7 @@ public class LectureControllerApplicationTest {
         String employeeNo = "12345";
         EmployeeNoRequest employeeNoRequest = new EmployeeNoRequest(employeeNo);
 
-        Mockito.when(lectureService.apply(lectureId, employeeNo)).thenThrow(new ApplicationException(ResponseCode.INVALID_LECTURE_TIME));
+        Mockito.when(lectureApplicationService.apply(lectureId, employeeNo)).thenThrow(new ApplicationException(ResponseCode.INVALID_LECTURE_TIME));
 
         mockMvc.perform(post(API_PATH, lectureId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -85,7 +85,7 @@ public class LectureControllerApplicationTest {
         String employeeNo = "12345";
         EmployeeNoRequest employeeNoRequest = new EmployeeNoRequest(employeeNo);
 
-        Mockito.when(lectureService.apply(lectureId, employeeNo)).thenThrow(new ApplicationException(ResponseCode.NO_CAPACITY_AVAILABLE));
+        Mockito.when(lectureApplicationService.apply(lectureId, employeeNo)).thenThrow(new ApplicationException(ResponseCode.NO_CAPACITY_AVAILABLE));
 
         mockMvc.perform(post(API_PATH, lectureId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -103,7 +103,7 @@ public class LectureControllerApplicationTest {
         EmployeeNoRequest employeeNoRequest = new EmployeeNoRequest(employeeNo);
 
         // 중복 신청인 경우
-        Mockito.when(lectureService.apply(lectureId, employeeNo)).thenThrow(new ApplicationException(ResponseCode.DUPLICATE_APPLICATION));
+        Mockito.when(lectureApplicationService.apply(lectureId, employeeNo)).thenThrow(new ApplicationException(ResponseCode.DUPLICATE_APPLICATION));
 
         mockMvc.perform(post(API_PATH, lectureId)
                         .contentType(MediaType.APPLICATION_JSON)
