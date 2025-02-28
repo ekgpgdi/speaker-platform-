@@ -5,6 +5,8 @@ import com.dahye.speakerplatform.common.enums.SortDirection;
 import com.dahye.speakerplatform.common.exception.customException.ApplicationException;
 import com.dahye.speakerplatform.lectures.domain.Application;
 import com.dahye.speakerplatform.lectures.domain.Lecture;
+import com.dahye.speakerplatform.lectures.dto.response.ApplicantUserListResponse;
+import com.dahye.speakerplatform.lectures.dto.response.ApplicantUserResponse;
 import com.dahye.speakerplatform.lectures.dto.response.LectureApplicationListResponse;
 import com.dahye.speakerplatform.lectures.dto.response.LectureApplicationResponse;
 import com.dahye.speakerplatform.lectures.enums.LectureApplicationSort;
@@ -13,6 +15,7 @@ import com.dahye.speakerplatform.lectures.repository.LectureRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
@@ -283,5 +286,17 @@ public class LectureApplicationService {
         }
 
         return ResponseCode.CREATED;
+    }
+
+    @Transactional(readOnly = true)
+    public ApplicantUserListResponse getLectureApplicantUserList(Long lectureId, int page, int size) {
+        Page<ApplicantUserResponse> applicantUserList = applicationRepository.getLectureApplicantUserList(lectureId, PageRequest.of(page, size));
+
+        return ApplicantUserListResponse.builder()
+                .applicantUserList(applicantUserList.getContent())
+                .totalElements(applicantUserList.getTotalElements())
+                .totalPages(applicantUserList.getTotalPages())
+                .isLast(applicantUserList.isLast())
+                .build();
     }
 }
