@@ -1,6 +1,7 @@
 package com.dahye.speakerplatform.lectures.repository;
 
 import com.dahye.speakerplatform.common.enums.SortDirection;
+import com.dahye.speakerplatform.lectures.dto.response.ApplicantUserResponse;
 import com.dahye.speakerplatform.lectures.dto.response.LectureApplicationResponse;
 import com.dahye.speakerplatform.lectures.enums.LectureApplicationSort;
 import com.querydsl.core.types.OrderSpecifier;
@@ -84,5 +85,29 @@ public class ApplicationRepositoryCustomImpl implements ApplicationRepositoryCus
 
         return new PageImpl<>(lectureApplicationResponseList, pageable, total);
 
+    }
+
+    @Override
+    public Page<ApplicantUserResponse> getLectureApplicantUserList(Long lectureId, Pageable pageable) {
+
+        List<ApplicantUserResponse> applicantUserList = queryFactory
+                .select(Projections.constructor(ApplicantUserResponse.class,
+                        application.employeeNo,
+                        application.createdAt))
+                .from(application)
+                .innerJoin(application.lecture, lecture)
+                .on(lecture.id.eq(lectureId))
+                .orderBy(application.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(application.count())
+                .from(application)
+                .innerJoin(application.lecture, lecture)
+                .on(lecture.id.eq(lectureId)).fetchOne();
+
+        return new PageImpl<>(applicantUserList, pageable, total);
     }
 }
