@@ -67,6 +67,34 @@
    - **설명**: 특정 강연에 신청한 사번 목록을 조회합니다.
    - **요청 파라미터**: `lecture_id`  
    - **응답 예시**:
+   ```json
+   {
+    "code": "SUCCESS",
+    "content": {
+        "totalPages": 1,
+        "isLast": true,
+        "totalElements": 4,
+        "applicantUserList": [
+            {
+                "employeeNo": "45678",
+                "applicationAt": "2025-02-27T16:05:46"
+            },
+            {
+                "employeeNo": "34567",
+                "applicationAt": "2025-02-27T16:02:32"
+            },
+            {
+                "employeeNo": "23456",
+                "applicationAt": "2025-02-27T15:55:08"
+            },
+            {
+                "employeeNo": "12345",
+                "applicationAt": "2025-02-27T15:55:08"
+            }
+            ]
+        }
+    }
+   ```
 
 ### Front API
 1. **강연 목록**  
