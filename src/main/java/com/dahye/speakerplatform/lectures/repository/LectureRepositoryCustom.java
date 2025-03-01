@@ -5,9 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface LectureRepositoryCustom {
     Page<Lecture> findByStartTimePlusOneDayGreaterThanEqual(LocalDateTime now, Pageable pageable);
 
     Page<Lecture> findPopularLectures(int periodDays, Pageable pageable);
+
+    List<Lecture> findLecturesStartedMoreThanOneHourAgo();
 }

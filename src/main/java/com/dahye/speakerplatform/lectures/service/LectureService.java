@@ -110,4 +110,11 @@ public class LectureService {
         lecture.setCurrentCapacity(lecture.getCurrentCapacity() + size);
         lectureRepository.save(lecture);
     }
+
+    @Transactional
+    public void cleanUpOldLectures() {
+        List<Lecture> lecturesToDelete = lectureRepository.findLecturesStartedMoreThanOneHourAgo();
+        List<Long> lecturesToDeleteIdList = lecturesToDelete.stream().map(Lecture::getId).toList();
+        lectureApplicationService.deleteRedis(lecturesToDeleteIdList);
+    }
 }

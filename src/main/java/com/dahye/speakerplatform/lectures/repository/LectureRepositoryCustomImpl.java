@@ -95,4 +95,12 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
 
         return new PageImpl<>(lectures, pageable, total);
     }
+
+    @Override
+    public List<Lecture> findLecturesStartedMoreThanOneHourAgo() {
+
+        return queryFactory.selectFrom(lecture)
+                .where(lecture.startTime.before(LocalDateTime.now().minusHours(1)))
+                .fetch();
+    }
 }

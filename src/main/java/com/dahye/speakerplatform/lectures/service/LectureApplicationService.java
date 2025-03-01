@@ -215,4 +215,29 @@ public class LectureApplicationService {
     public void save(List<Application> applicationList) {
         applicationRepository.saveAll(applicationList);
     }
+
+    @Transactional
+    public void deleteRedis(List<Long> lecturesToDeleteIdList) {
+        if (lecturesToDeleteIdList.isEmpty()) {
+            return;
+        }
+
+        for (Long lectureId : lecturesToDeleteIdList) {
+            try {
+                // Redis 내 강연 정보 삭제
+                String lectureInfoKey = "lecture:" + lectureId + ":startTime";
+                lectureCapacityRedisTemplate.delete(lectureInfoKey);
+
+                // Redis 내 강연 신청자 정보 삭제
+                String applicationsKey = "lecture:" + lectureId + ":applications";
+                userApplicationRedisTemplate.delete(applicationsKey);
+
+                // Redis 내 강연 신청자 새로운 신청 정보 삭제
+                String applicationsNewKey = "lecture:" + lectureId + ":applications:new";
+                userApplicationRedisTemplate.delete(applicationsNewKey);
+            } catch (Exception e) {
+                log.error("Failed to delete Redis keys for lectureId: {}, {}", lectureId, e.getMessage());
+            }
+        }
+    }
 }
