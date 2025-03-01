@@ -11,6 +11,7 @@
 
 ### 📌 Testing  
 * JUnit
+* H2
   
 ### 📌 Others
 * Redis
@@ -297,7 +298,7 @@
 ### 사용자 테이블 (users)
 | 컬럼 이름       | 데이터 타입                         | 설명            |
 |----------------|--------------------------------|-----------------|
-| id             | INT                            | 사용자 고유 ID   |
+| id             | BIGINT                            | 사용자 고유 ID   |
 | employee_no    | CHAR(5)                        | 사번 (5자리)     |
 | password       | VARCHAR(255)                   | 비밀번호         |
 | role           | ENUM('ROLE_ADMIN','ROLE_USER') | 권한 (admin/user) |
@@ -317,7 +318,7 @@ VALUES
 ### 강연 테이블 (lectures)
 | 컬럼 이름       | 데이터 타입   | 설명              |
 |----------------|--------------|-------------------|
-| id             | INT          | 강연 고유 ID       |
+| id             | BIGINT          | 강연 고유 ID       |
 | lecturer       | VARCHAR(100) | 강연자             |
 | location       | VARCHAR(255) | 강연장             |
 | capacity       | INT          | 신청 가능 인원수   |
@@ -331,9 +332,9 @@ VALUES
 ### 신청자 테이블 (applications)
 | 컬럼 이름       | 데이터 타입   | 설명              |
 |----------------|--------------|-------------------|
-| id             | INT          | 신청 고유 ID       |
-| lecture_id     | INT          | 강연 ID            |
-| employee_no    | CHAR(5)      | 사번 (5자리)       |
+| id             | BIGINT          | 신청 고유 ID       |
+| lecture_id     | BIGINT          | 강연 ID            |
+| user_id    | BIGINT      | 사용자 ID       |
 | created_at     | DATETIME     | 데이터 생성 시간   |
 | updated_at     | DATETIME     | 데이터 수정 시간   |
 
@@ -356,4 +357,5 @@ VALUES
   2. Redis에 저장된 신청 내역을 DB에 저장
   3. 신청 내역을 기존 신청 목록으로 이동 : Redis에서 신청자가 추가된 `lecture:*:new` 의 신청 내역을 기존 신청 목록인 `lecture:*:applications` 로 이동시킵니다.
 
+✅ 스케줄러가 10분마다 강연 시작 시간이 1시간이 지난 강연들의 데이터를 확인하여 Redis에서 삭제합니다.
   
