@@ -19,14 +19,17 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    private User user;
+
     @Test
     @DisplayName("Repository - Optional 유저 조회 성공")
     void findByEmployeeNo_Success() {
-        userRepository.save(User.builder()
+        user = User.builder()
                 .employeeNo("12345")
                 .password("****")
                 .role(Role.ROLE_USER)
-                .build());
+                .build();
+        userRepository.save(user);
 
         // When
         Optional<User> result = userRepository.findByEmployeeNo("12345");
@@ -34,7 +37,7 @@ public class UserRepositoryTest {
         // Then
         assertTrue(result.isPresent(), "유저가 존재하지 않습니다.");
         Assertions.assertEquals("12345", result.get().getEmployeeNo(), "유저 사번이 맞지 않습니다.");
-        Assertions.assertEquals(1L, result.get().getId(), "유저 ID가 맞지 않습니다.");
+        Assertions.assertEquals(user.getId(), result.get().getId(), "유저 ID가 맞지 않습니다.");
     }
 
     @Test
