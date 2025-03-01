@@ -292,6 +292,7 @@
     }
    ```
 
+<br/> 
 
 ## 3. 테이블 구성
 
@@ -337,6 +338,8 @@ VALUES
 | user_id    | BIGINT      | 사용자 ID       |
 | created_at     | DATETIME     | 데이터 생성 시간   |
 | updated_at     | DATETIME     | 데이터 수정 시간   |
+
+<br/> 
 
 ## 4. 강연 신청 처리 흐름
 
