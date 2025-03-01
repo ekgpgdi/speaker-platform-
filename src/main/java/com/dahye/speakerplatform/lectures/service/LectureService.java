@@ -18,12 +18,19 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class LectureService {
     private final LectureRepository lectureRepository;
     private final LectureApplicationService lectureApplicationService;
+
+    @Transactional(readOnly = true)
+    public Optional<Lecture> getOptional(Long lectureId) {
+        return lectureRepository.findById(lectureId);
+    }
 
     @Transactional
     public ResponseCode createLecture(LectureCreateRequest lectureCreateRequest) {
@@ -96,5 +103,11 @@ public class LectureService {
         );
 
         return makeLectureListResponse(lectureList);
+    }
+
+    @Transactional
+    public void addCapacity(Lecture lecture, int size) {
+        lecture.setCurrentCapacity(lecture.getCurrentCapacity() + size);
+        lectureRepository.save(lecture);
     }
 }

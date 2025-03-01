@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-public class LectureApplicationServiceApplicationTest {
+public class LectureApplicationServiceApplicationTestSync {
 
     @InjectMocks
     private LectureApplicationService lectureApplicationService;
