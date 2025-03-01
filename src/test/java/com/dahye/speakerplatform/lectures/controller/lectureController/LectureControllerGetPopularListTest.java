@@ -1,7 +1,8 @@
-package com.dahye.speakerplatform.lectures.controller;
+package com.dahye.speakerplatform.lectures.controller.lectureController;
 
 import com.dahye.speakerplatform.common.enums.SortDirection;
 import com.dahye.speakerplatform.common.security.service.JwtService;
+import com.dahye.speakerplatform.lectures.controller.LectureController;
 import com.dahye.speakerplatform.lectures.dto.response.LectureListResponse;
 import com.dahye.speakerplatform.lectures.dto.response.LectureResponse;
 import com.dahye.speakerplatform.lectures.enums.LectureSort;
@@ -27,11 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AdminLectureController.class)
+@WebMvcTest(LectureController.class)
 @ExtendWith(MockitoExtension.class)
 @WithMockUser("TEST_USER")
-public class AdminLectureControllerGetListTest {
-    private final String API_PATH = "/admin/api/v1/lectures";
+public class LectureControllerGetPopularListTest {
+    private final String API_PATH = "/api/v1/lectures/popular";
     @Autowired
     private MockMvc mockMvc;
 
@@ -42,11 +43,12 @@ public class AdminLectureControllerGetListTest {
     private JwtService jwtService;
 
     @Test
-    @DisplayName("[ADMIN] 강연 목록 조회 성공 테스트")
+    @DisplayName("인기 강연 목록 조회 성공 테스트")
     public void getListTest() throws Exception {
         // Given
         int page = 0;
         int size = 10;
+        int periodDays = 3;
 
         List<LectureResponse> lectureList = new ArrayList<>();
 
@@ -70,16 +72,14 @@ public class AdminLectureControllerGetListTest {
                 .content("데이터 분석의 핵심")
                 .build());
 
-        Mockito.when(lectureService.getLectureList(page, size, LectureSort.CREATED_AT, SortDirection.DESC))
+        Mockito.when(lectureService.getPopularLectureListByApplicationCount(page, size, periodDays))
                 .thenReturn(LectureListResponse.builder()
                         .lectureList(lectureList)
                         .totalElements(2)
                         .totalPages(1)
                         .isLast(true)
-                        .build()
-                );
+                        .build());
 
-        // When & Then
         mockMvc.perform(get(API_PATH).with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())

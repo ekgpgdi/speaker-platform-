@@ -4,7 +4,6 @@ import com.dahye.speakerplatform.lectures.domain.Lecture;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -95,5 +94,13 @@ public class LectureRepositoryCustomImpl implements LectureRepositoryCustom {
                 .fetchOne();
 
         return new PageImpl<>(lectures, pageable, total);
+    }
+
+    @Override
+    public List<Lecture> findLecturesStartedMoreThanOneHourAgo() {
+
+        return queryFactory.selectFrom(lecture)
+                .where(lecture.startTime.before(LocalDateTime.now().minusHours(1)))
+                .fetch();
     }
 }

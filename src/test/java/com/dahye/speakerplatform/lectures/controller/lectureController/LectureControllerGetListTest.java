@@ -1,7 +1,8 @@
-package com.dahye.speakerplatform.lectures.controller;
+package com.dahye.speakerplatform.lectures.controller.lectureController;
 
 import com.dahye.speakerplatform.common.enums.SortDirection;
 import com.dahye.speakerplatform.common.security.service.JwtService;
+import com.dahye.speakerplatform.lectures.controller.LectureController;
 import com.dahye.speakerplatform.lectures.dto.response.LectureListResponse;
 import com.dahye.speakerplatform.lectures.dto.response.LectureResponse;
 import com.dahye.speakerplatform.lectures.enums.LectureSort;

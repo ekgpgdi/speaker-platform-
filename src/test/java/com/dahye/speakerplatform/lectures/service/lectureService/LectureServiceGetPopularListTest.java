@@ -1,8 +1,9 @@
-package com.dahye.speakerplatform.lectures.service;
+package com.dahye.speakerplatform.lectures.service.lectureService;
 
 import com.dahye.speakerplatform.lectures.domain.Lecture;
 import com.dahye.speakerplatform.lectures.dto.response.LectureListResponse;
 import com.dahye.speakerplatform.lectures.repository.LectureRepository;
+import com.dahye.speakerplatform.lectures.service.LectureService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,7 +1,8 @@
-package com.dahye.speakerplatform.lectures.service;
+package com.dahye.speakerplatform.lectures.service.lectureApplicationService;
 
 import com.dahye.speakerplatform.common.enums.ResponseCode;
 import com.dahye.speakerplatform.common.exception.customException.ApplicationException;
+import com.dahye.speakerplatform.lectures.service.LectureApplicationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-public class LectureApplicationServiceApplicationTest {
+public class LectureApplicationServiceApplicationTestSync {
 
     @InjectMocks
     private LectureApplicationService lectureApplicationService;
