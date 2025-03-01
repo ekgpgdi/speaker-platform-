@@ -1,9 +1,11 @@
-package com.dahye.speakerplatform.lectures.service;
+package com.dahye.speakerplatform.lectures.service.lectureService;
 
 import com.dahye.speakerplatform.common.enums.ResponseCode;
 import com.dahye.speakerplatform.lectures.domain.Lecture;
 import com.dahye.speakerplatform.lectures.dto.request.LectureCreateRequest;
 import com.dahye.speakerplatform.lectures.repository.LectureRepository;
+import com.dahye.speakerplatform.lectures.service.LectureApplicationService;
+import com.dahye.speakerplatform.lectures.service.LectureService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

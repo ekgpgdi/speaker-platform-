@@ -1,6 +1,7 @@
-package com.dahye.speakerplatform.lectures.controller;
+package com.dahye.speakerplatform.lectures.controller.adminLectureApplicationController;
 
 import com.dahye.speakerplatform.common.security.service.JwtService;
+import com.dahye.speakerplatform.lectures.controller.AdminLectureApplicationController;
 import com.dahye.speakerplatform.lectures.dto.response.ApplicantUserListResponse;
 import com.dahye.speakerplatform.lectures.dto.response.ApplicantUserResponse;
 import com.dahye.speakerplatform.lectures.service.LectureApplicationService;

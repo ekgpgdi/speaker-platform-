@@ -6,7 +6,6 @@ import com.dahye.speakerplatform.lectures.dto.response.LectureApplicationRespons
 import com.dahye.speakerplatform.lectures.enums.LectureApplicationSort;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.*;
@@ -16,6 +15,7 @@ import java.util.List;
 
 import static com.dahye.speakerplatform.lectures.domain.QApplication.application;
 import static com.dahye.speakerplatform.lectures.domain.QLecture.lecture;
+import static com.dahye.speakerplatform.users.entity.QUser.user;
 
 public class ApplicationRepositoryCustomImpl implements ApplicationRepositoryCustom {
     private JPAQueryFactory queryFactory;
@@ -63,8 +63,9 @@ public class ApplicationRepositoryCustomImpl implements ApplicationRepositoryCus
                         application.id))
                 .from(application)
                 .join(lecture).on(application.lecture.id.eq(lecture.id))
+                .join(application.user)
                 .where(
-                        application.employeeNo.eq(employeeNo),
+                        user.employeeNo.eq(employeeNo),
                         lecture.startTime.between(oneDayAge, oneWeekAhead)
                 )
                 .orderBy(getOrderSpecifierBySort(pageable.getSort()))
@@ -74,11 +75,11 @@ public class ApplicationRepositoryCustomImpl implements ApplicationRepositoryCus
 
         long total = queryFactory
                 .select(application.count())
-                .from(lecture)
                 .from(application)
                 .join(lecture).on(application.lecture.id.eq(lecture.id))
+                .join(application.user)
                 .where(
-                        application.employeeNo.eq(employeeNo),
+                        user.employeeNo.eq(employeeNo),
                         lecture.startTime.between(oneDayAge, oneWeekAhead)
                 )
                 .fetchOne();
@@ -92,11 +93,12 @@ public class ApplicationRepositoryCustomImpl implements ApplicationRepositoryCus
 
         List<ApplicantUserResponse> applicantUserList = queryFactory
                 .select(Projections.constructor(ApplicantUserResponse.class,
-                        application.employeeNo,
+                        user.employeeNo,
                         application.createdAt))
                 .from(application)
                 .innerJoin(application.lecture, lecture)
-                .on(lecture.id.eq(lectureId))
+                .innerJoin(application.user, user)
+                .where(lecture.id.eq(lectureId))
                 .orderBy(application.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -106,7 +108,9 @@ public class ApplicationRepositoryCustomImpl implements ApplicationRepositoryCus
                 .select(application.count())
                 .from(application)
                 .innerJoin(application.lecture, lecture)
-                .on(lecture.id.eq(lectureId)).fetchOne();
+                .innerJoin(application.user, user)
+                .where(lecture.id.eq(lectureId))
+                .fetchOne();
 
         return new PageImpl<>(applicantUserList, pageable, total);
     }

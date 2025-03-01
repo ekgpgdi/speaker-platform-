@@ -1,10 +1,11 @@
-package com.dahye.speakerplatform.lectures.service;
+package com.dahye.speakerplatform.lectures.service.lectureApplicationService;
 
 import com.dahye.speakerplatform.common.enums.SortDirection;
 import com.dahye.speakerplatform.lectures.dto.response.LectureApplicationListResponse;
 import com.dahye.speakerplatform.lectures.dto.response.LectureApplicationResponse;
 import com.dahye.speakerplatform.lectures.enums.LectureApplicationSort;
 import com.dahye.speakerplatform.lectures.repository.ApplicationRepository;
+import com.dahye.speakerplatform.lectures.service.LectureApplicationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class LectureApplicationServiceGetListTest {
+public class LectureApplicationSyncServiceGetListTest {
     @InjectMocks
     private LectureApplicationService lectureApplicationService;
 

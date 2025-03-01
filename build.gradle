@@ -53,6 +53,8 @@ dependencies {
     // redis
     implementation 'org.springframework.data:spring-data-redis'
     implementation 'io.lettuce:lettuce-core:6.5.1.RELEASE'
+
+    testImplementation 'com.h2database:h2'
 }
 
 tasks.named('test') {

@@ -1,10 +1,11 @@
-package com.dahye.speakerplatform.lectures.service;
+package com.dahye.speakerplatform.lectures.service.lectureService;
 
 import com.dahye.speakerplatform.common.enums.SortDirection;
 import com.dahye.speakerplatform.lectures.domain.Lecture;
 import com.dahye.speakerplatform.lectures.dto.response.LectureListResponse;
 import com.dahye.speakerplatform.lectures.enums.LectureSort;
 import com.dahye.speakerplatform.lectures.repository.LectureRepository;
+import com.dahye.speakerplatform.lectures.service.LectureService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +24,9 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
-public class LectureServiceGetListTest {
+public class AdminLectureServiceGetListTest {
     @InjectMocks
     LectureService lectureService;
 
@@ -34,7 +34,7 @@ public class LectureServiceGetListTest {
     LectureRepository lectureRepository;
 
     @Test
-    @DisplayName("강연 목록 조회 성공 테스트")
+    @DisplayName("[ADMIN] 강연 목록 조회 성공 테스트")
     public void lectureList_Success() {
         // Given
         int page = 0;
@@ -43,6 +43,7 @@ public class LectureServiceGetListTest {
         SortDirection direction = SortDirection.DESC;
 
         List<Lecture> lectureList = new ArrayList<>();
+
         lectureList.add(Lecture.builder()
                 .id(2L)
                 .lecturer("홍길동")
@@ -65,11 +66,11 @@ public class LectureServiceGetListTest {
 
         Page<Lecture> lecturePage = new PageImpl<>(lectureList, PageRequest.of(page, size, Sort.by(direction.getDirection(), sort.getFieldName())), lectureList.size());
 
-        Mockito.when(lectureRepository.findByStartTimePlusOneDayGreaterThanEqual(any(LocalDateTime.class), any(PageRequest.class)))
+        Mockito.when(lectureRepository.findAll(PageRequest.of(page, size, Sort.by(direction.getDirection(), sort.getFieldName()))))
                 .thenReturn(lecturePage);
 
         // When
-        LectureListResponse response = lectureService.getLectureListByLectureStartTime(page, size, sort, direction);
+        LectureListResponse response = lectureService.getLectureList(page, size, sort, direction);
 
         // Then
         assertEquals(response.getLectureList().size(), 2);

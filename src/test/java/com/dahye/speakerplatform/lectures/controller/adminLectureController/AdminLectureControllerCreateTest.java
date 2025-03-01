@@ -1,7 +1,8 @@
-package com.dahye.speakerplatform.lectures.controller;
+package com.dahye.speakerplatform.lectures.controller.adminLectureController;
 
 import com.dahye.speakerplatform.common.enums.ResponseCode;
 import com.dahye.speakerplatform.common.security.service.JwtService;
+import com.dahye.speakerplatform.lectures.controller.AdminLectureController;
 import com.dahye.speakerplatform.lectures.dto.request.LectureCreateRequest;
 import com.dahye.speakerplatform.lectures.service.LectureService;
 import com.fasterxml.jackson.databind.ObjectMapper;

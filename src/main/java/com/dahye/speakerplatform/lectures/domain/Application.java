@@ -1,11 +1,14 @@
 package com.dahye.speakerplatform.lectures.domain;
 
 import com.dahye.speakerplatform.common.domain.BaseTimeEntity;
+import com.dahye.speakerplatform.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Builder
@@ -19,10 +22,13 @@ public class Application extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "employee_no", nullable = false, length = 5)
-    private String employeeNo;
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "lecture_id", nullable = false)
     private Lecture lecture;
 }
