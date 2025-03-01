@@ -225,8 +225,11 @@ public class LectureApplicationService {
         for (Long lectureId : lecturesToDeleteIdList) {
             try {
                 // Redis 내 강연 정보 삭제
-                String lectureInfoKey = "lecture:" + lectureId + ":startTime";
-                lectureCapacityRedisTemplate.delete(lectureInfoKey);
+                String lectureStartTimeInfoKey = "lecture:" + lectureId + ":startTime";
+                lectureCapacityRedisTemplate.delete(lectureStartTimeInfoKey);
+
+                String lectureCapacityInfoKey = "lecture:" + lectureId + ":capacity";
+                lectureCapacityRedisTemplate.delete(lectureCapacityInfoKey);
 
                 // Redis 내 강연 신청자 정보 삭제
                 String applicationsKey = "lecture:" + lectureId + ":applications";
